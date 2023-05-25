@@ -8,9 +8,10 @@ In this project, we would like to present a pilot for such a pipeline: from data
 The requirements are as follows: the submission of data should be possible from anywhere and user-friendly; there should be a window for control between the submission of data and its conversion to a IIIF manifest; the single steps of the process should be automated wherever feasible in order to limit manual intervention to a minimum. 
 The pilot presented uses a Google Form for data submission and MySQL for database management; the orchestrator is written in Golang. With a view to the future, the final deliverable will be a docker container allowing the use of alternative interfaces or databases. 
 
-## Database auth
+## Environment variables
 
-To connect to the database create a `.env` file containing the following data
+To connect to the database remember to pass the following environment variables:
 ```
-MONGOURI=mongodb+srv://{USERNAME}:{PASSWORD}@{DATABASE-NAME}.mongodb.net/?retryWrites=true&w=majority
-```
+* `MONGO_URI` is the mongodb connection string, e.g., mongodb://localhost:27017
+* `MONGO_COLLECTION` is the collection name in the mongodb database
+* `IMAGE_STORE_PATH` is the relative path where the images should be stored, e.g., `/imgs/`
