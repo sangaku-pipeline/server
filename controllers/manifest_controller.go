@@ -105,3 +105,12 @@ func GetManifestMetadata() gin.HandlerFunc {
 		c.JSON(http.StatusOK, responses.ManifestResponse{Status: http.StatusOK, Message: "Success", Data: map[string]interface{}{"data": manifest}})
 	}
 }
+
+func GetManifestTest() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		generatedManifest := models.GenerateManifest(uuid.NewString())
+
+		c.JSON(http.StatusOK, responses.ManifestResponse{Status: http.StatusOK, Message: "Success", Data: map[string]interface{}{"data": generatedManifest}})
+	}
+}
