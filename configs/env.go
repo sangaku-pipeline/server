@@ -13,3 +13,7 @@ func EnvMongoCollection() string {
 func EnvImageStorePath() string {
 	return os.Getenv("IMAGE_STORE_PATH")
 }
+
+func EnvManifestStorePath() string {
+	return os.Getenv("MANIFEST_STORE_PATH")
+}

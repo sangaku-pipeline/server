@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"context"
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"path/filepath"
 	"time"
@@ -49,8 +51,21 @@ func CreateManifestMetadata() gin.HandlerFunc {
 
 		// Create the new manifest
 		newManifest := models.ManifestData{
-			UUID:  manifestId,
-			Label: manifest.Label,
+			UUID:          manifestId,
+			SiteEN:        manifest.SiteEN,
+			SiteJP:        manifest.SiteJP,
+			LocationEN:    manifest.LocationEN,
+			LocationJP:    manifest.LocationJP,
+			Year:          manifest.Year,
+			AuthorEN:      manifest.AuthorEN,
+			AuthorJP:      manifest.AuthorJP,
+			SchoolEN:      manifest.SchoolEN,
+			SchoolJP:      manifest.SchoolJP,
+			Dimensions:    manifest.Dimensions,
+			MediumEN:      manifest.MediumEN,
+			MediumJP:      manifest.MediumJP,
+			PermissionsEN: manifest.PermissionsEN,
+			PermissionsJP: manifest.PermissionsJP,
 		}
 
 		var images []models.Image
@@ -106,11 +121,33 @@ func GetManifestMetadata() gin.HandlerFunc {
 	}
 }
 
-func GetManifestTest() gin.HandlerFunc {
+func GenerateManifestByID() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		generatedManifest := models.GenerateManifest(uuid.NewString())
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		manifestId := c.Param("manifestId")
 
-		c.JSON(http.StatusOK, responses.ManifestResponse{Status: http.StatusOK, Message: "Success", Data: map[string]interface{}{"data": generatedManifest}})
+		var manifest models.ManifestData
+		defer cancel()
+
+		err := manifestCollection.FindOne(ctx, bson.M{"uuid": manifestId}).Decode(&manifest)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, responses.ManifestResponse{Status: http.StatusInternalServerError, Message: "Error", Data: map[string]interface{}{"data": err.Error()}})
+			return
+		}
+
+		generatedManifest := models.GenerateManifest(manifest)
+
+		content, err := json.Marshal(generatedManifest)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, responses.ManifestResponse{Status: http.StatusInternalServerError, Message: "Error", Data: map[string]interface{}{"data": err.Error()}})
+		}
+
+		err = ioutil.WriteFile(configs.EnvManifestStorePath()+"/"+manifestId+".json", content, 0644)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, responses.ManifestResponse{Status: http.StatusInternalServerError, Message: "Error", Data: map[string]interface{}{"data": err.Error()}})
+		}
+
+		c.JSON(http.StatusOK, generatedManifest)
 	}
 }
