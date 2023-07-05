@@ -80,10 +80,10 @@ func CreateManifestMetadata() gin.HandlerFunc {
 
 		for _, file := range files {
 			var image models.Image
-			image.ID = uuid.NewString()
+			image.ID = uuid.NewString() + filepath.Ext(file.Filename)
 			images = append(images, image)
 
-			if err := c.SaveUploadedFile(file, configs.EnvImageStorePath()+image.ID+filepath.Ext(file.Filename)); err != nil {
+			if err := c.SaveUploadedFile(file, configs.EnvImageStorePath()+image.ID); err != nil {
 				c.String(http.StatusBadRequest, "upload file err: %s", err.Error())
 				return
 			}
@@ -143,7 +143,7 @@ func GenerateManifestByID() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, responses.ManifestResponse{Status: http.StatusInternalServerError, Message: "Error", Data: map[string]interface{}{"data": err.Error()}})
 		}
 
-		err = ioutil.WriteFile(configs.EnvManifestStorePath()+"/"+manifestId+".json", content, 0644)
+		err = ioutil.WriteFile(configs.EnvManifestStorePath()+manifestId+".json", content, 0644)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, responses.ManifestResponse{Status: http.StatusInternalServerError, Message: "Error", Data: map[string]interface{}{"data": err.Error()}})
 		}

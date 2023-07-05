@@ -101,14 +101,14 @@ type AnnotationBody struct {
 
 func GenerateManifest(retrievedManifest ManifestData) Manifest {
 
-	baseID := "https://e807-92-223-159-150.ngrok-free.app/" + retrievedManifest.UUID
+	baseID := configs.EnvBaseURI() + ":8080/" + retrievedManifest.UUID
 	manifestID := baseID + ".json"
 
 	items := []CanvasItem{}
 
 	// Items:       []map[string]interface{}{{"id": "someIDstring", "type": "sc:canvas", "label": map[string]interface{}{"en": []string{"Canvas with one sangaku image"}, "jp": []string{"translation of English"}}, "height": 3024, "width": 4032, "items": map[string]interface{}{"id": "someIDstring", "type": "AnnotationPage", "items": map[string]interface{}{"id": "someURI", "type": "Annotation", "motivation": "painting", "body": map[string]interface{}{"id": "someURI", "type": "Image", "format": "image/jpeg", "height": 3024, "width": 4032, "service": map[string]interface{}{"id": "someURI", "profile": "level1", "type": "ImageService3"}, "target": "targetURI"}}}}, {}},
 	for _, image := range retrievedManifest.Images {
-		image_id := "http://localhost:8182/iiif/3/" + image.ID
+		image_id := configs.EnvBaseURI() + ":8182/iiif/3/" + image.ID
 
 		var response ResponseImageAPI
 		configs.GetJson(image_id, &response)
@@ -124,7 +124,7 @@ func GenerateManifest(retrievedManifest ManifestData) Manifest {
 				Type:       "AnnotationPage",
 				Motivation: "painting",
 				Body: AnnotationBody{
-					Id:     image_id + "/full/full/0/default.jpg",
+					Id:     image_id + "/full/max/0/default.jpg",
 					Type:   "Image",
 					Format: "image/jpeg",
 					Height: response.Height,

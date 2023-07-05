@@ -17,3 +17,7 @@ func EnvImageStorePath() string {
 func EnvManifestStorePath() string {
 	return os.Getenv("MANIFEST_STORE_PATH")
 }
+
+func EnvBaseURI() string {
+	return os.Getenv("BASE_URI")
+}
