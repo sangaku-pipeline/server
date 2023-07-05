@@ -2,8 +2,6 @@ package controllers
 
 import (
 	"context"
-	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"path/filepath"
 	"time"
@@ -138,15 +136,16 @@ func GenerateManifestByID() gin.HandlerFunc {
 
 		generatedManifest := models.GenerateManifest(manifest)
 
-		content, err := json.Marshal(generatedManifest)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, responses.ManifestResponse{Status: http.StatusInternalServerError, Message: "Error", Data: map[string]interface{}{"data": err.Error()}})
-		}
+		/*
+			content, err := json.Marshal(generatedManifest)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, responses.ManifestResponse{Status: http.StatusInternalServerError, Message: "Error", Data: map[string]interface{}{"data": err.Error()}})
+			}
 
-		err = ioutil.WriteFile(configs.EnvManifestStorePath()+manifestId+".json", content, 0644)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, responses.ManifestResponse{Status: http.StatusInternalServerError, Message: "Error", Data: map[string]interface{}{"data": err.Error()}})
-		}
+			err = ioutil.WriteFile(configs.EnvManifestStorePath()+manifestId+".json", content, 0644)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, responses.ManifestResponse{Status: http.StatusInternalServerError, Message: "Error", Data: map[string]interface{}{"data": err.Error()}})
+			}*/
 
 		c.JSON(http.StatusOK, generatedManifest)
 	}
