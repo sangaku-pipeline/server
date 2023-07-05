@@ -101,7 +101,7 @@ type AnnotationBody struct {
 
 func GenerateManifest(retrievedManifest ManifestData) Manifest {
 
-	baseID := configs.EnvBaseURI() + ":8080/" + retrievedManifest.UUID
+	baseID := configs.EnvBaseURI() + ":8080/manifest/" + retrievedManifest.UUID
 	manifestID := baseID + ".json"
 
 	items := []CanvasItem{}
