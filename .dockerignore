@@ -4,3 +4,4 @@ README.md
 .git/*
 Dockerfile
 __debug_bin
+.docker-build
