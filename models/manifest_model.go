@@ -102,7 +102,7 @@ type AnnotationBody struct {
 func GenerateManifest(retrievedManifest ManifestData) Manifest {
 
 	baseID := configs.EnvBaseURI() + ":8080/" + retrievedManifest.UUID
-	manifestID := baseID + ".json"
+	//manifestID := baseID + ".json"
 
 	items := []CanvasItem{}
 
@@ -149,7 +149,7 @@ func GenerateManifest(retrievedManifest ManifestData) Manifest {
 
 	manifest := Manifest{
 		Context: "http://iiif.io/api/presentation/3/context.json",
-		ID:      manifestID,
+		ID:      baseID,
 		Type:    "sc:Manifest",
 		Label:   Label{English: []string{retrievedManifest.SiteEN + retrievedManifest.LocationEN}, Japanese: []string{retrievedManifest.SiteJP + retrievedManifest.LocationJP}},
 		Summary: Label{English: []string{"Sangaku in X temple, Y location, by Z author"}, Japanese: []string{"算額の説明"}},

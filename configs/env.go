@@ -21,3 +21,7 @@ func EnvManifestStorePath() string {
 func EnvBaseURI() string {
 	return os.Getenv("BASE_URI")
 }
+
+func EnvPort() string {
+	return os.Getenv("PORT")
+}
